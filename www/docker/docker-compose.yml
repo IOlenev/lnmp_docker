@@ -39,7 +39,7 @@ services:
 #    links:
 #      - blank_php
     extra_hosts:
-      - "blank.front:127.0.0.1"
+      - "blank.dev:127.0.0.1"
 
   blank_pma:
     hostname: blank_pma
