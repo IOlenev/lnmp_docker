@@ -1,0 +1,59 @@
+version: '3.2'
+
+services:
+  blank_db:
+    hostname: blank_db
+    container_name: blank_db
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../../docker_data/db:/var/lib/mysql #storing db data (requires empty directory ../../docker_data/db)
+      - ../../docker_data/dump:/tmp #share db dump directory for manual import from container console
+    environment:
+      MYSQL_ROOT_PASSWORD: 'rootpwd'
+
+  blank_php:
+    hostname: blank_php
+    container_name: blank_php
+    build:
+      context: ./
+      dockerfile: php.Dockerfile
+#    links:
+#      - blank_db
+    volumes:
+      - ../../www:/var/www
+      - ../../docker_data/tmp:/tmp
+
+  blank_web:
+    hostname: blank_web
+    container_name: blank_web
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./hosts:/etc/nginx/conf.d
+      - ../../www:/var/www
+      - ../../docker_data/logs/nginx:/var/log/nginx
+#    links:
+#      - blank_php
+    extra_hosts:
+      - "blank.front:127.0.0.1"
+
+  blank_pma:
+    hostname: blank_pma
+    container_name: blank_pma
+    image: phpmyadmin
+    #    restart: always
+    ports:
+      - 81:80
+    extra_hosts:
+      - "blank.pma:127.0.0.1"
+#    links:
+#      - blank_db
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=blank_db
+      - PMA_USER=root
+      - PMA_PASSWORD=rootpwd
