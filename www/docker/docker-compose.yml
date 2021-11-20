@@ -1,9 +1,9 @@
 version: '3.2'
 
 services:
-  blank_db:
-    hostname: blank_db
-    container_name: blank_db
+  foo_db:
+    hostname: foo_db
+    container_name: foo_db
     image: mysql:5.7
     ports:
       - "3306:3306"
@@ -13,21 +13,21 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 'rootpwd'
 
-  blank_php:
-    hostname: blank_php
-    container_name: blank_php
+  foo_php:
+    hostname: foo_php
+    container_name: foo_php
     build:
       context: ./
       dockerfile: php.Dockerfile
-#    links:
-#      - blank_db
+    links:
+      - foo_db
     volumes:
       - ../../www:/var/www
       - ../../docker_data/tmp:/tmp
 
-  blank_web:
-    hostname: blank_web
-    container_name: blank_web
+  foo_web:
+    hostname: foo_web
+    container_name: foo_web
     image: nginx:latest
     ports:
       - "80:80"
@@ -36,24 +36,24 @@ services:
       - ./hosts:/etc/nginx/conf.d
       - ../../www:/var/www
       - ../../docker_data/logs/nginx:/var/log/nginx
-#    links:
-#      - blank_php
+    links:
+      - foo_php
     extra_hosts:
-      - "blank.dev:127.0.0.1"
+      - "foo.local:127.0.0.1"
 
-  blank_pma:
-    hostname: blank_pma
-    container_name: blank_pma
+  foo_pma:
+    hostname: foo_pma
+    container_name: foo_pma
     image: phpmyadmin
     #    restart: always
     ports:
       - 81:80
     extra_hosts:
-      - "blank.pma:127.0.0.1"
-#    links:
-#      - blank_db
+      - "foo.pma:127.0.0.1"
+    links:
+      - foo_db
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=blank_db
+      - PMA_HOST=foo_db
       - PMA_USER=root
       - PMA_PASSWORD=rootpwd
