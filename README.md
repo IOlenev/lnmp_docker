@@ -5,7 +5,7 @@ Requires Git and Docker installed
 
 Starting new project steps:
 1. Create new directory (for example "blank.dev") and fall in
-    > mkdir foo.dev && cd blank.dev 
+    > mkdir blank.dev && cd blank.dev 
 2. Clone "lnmp_docker"
     > git clone https://github.com/IOlenev/lnmp_docker.git
 3. Rearange directories
