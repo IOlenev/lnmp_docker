@@ -32,9 +32,9 @@ RUN apt-get update \
              libcurl4-openssl-dev \
              pkg-config \
              libldap2-dev \
-             libpq-dev \
-  && pecl install mongodb \
-  && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongodb-ext.ini
+             libpq-dev
+#  && pecl install mongodb \
+#  && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongodb-ext.ini
 
 RUN docker-php-ext-configure intl --enable-intl && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
